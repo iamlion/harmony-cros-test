@@ -1,0 +1,56 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<script type="text/javascript" src="./ejs.js"></script>
+<script type="text/javascript" src="./jquery.js"></script>
+
+
+<div onclick="sendReq()" style="background:blue;">
+    发送ajax
+</div>
+
+<div style="max-width:100%;" id="console-rlt">
+
+</div>
+
+
+
+<script type="text/javascript" >
+let consoleHtml = "";
+(function() {
+    const consoleOutputDiv = document.getElementById('console-output');
+
+    function appendMessage(message, type) {
+        consoleHtml += "<p><span style='color:" + type + "'>" + message + "</span></p></br>";
+        $("#console-rlt").html(consoleHtml)
+    }
+
+    ['log', 'warn', 'error', 'info'].forEach(function(method) {
+        const original = console[method];
+        console[method] = function(...args) {
+            appendMessage(args.join(' '), method);
+            original.apply(console, args);
+        };
+    });
+})();
+
+function sendReq() {
+  $.ajax({
+    url: "https://api.juejin.cn/user_api/v1/user/get?aid=2608&uuid=7370900009405302312&spider=0&not_self=0&verifyFp=verify_lz0jpoi0_8tMrqQMP_Gp3K_43wC_8Ov9_6hCoCUW3WwE3&fp=verify_lz0jpoi0_8tMrqQMP_Gp3K_43wC_8Ov9_6hCoCUW3WwE3&msToken=53oQA-e6PoRtHLr_f_aFRK5qKX9b2hry5yKmiQH68gchiaW-Sk8jdazfi0H52EL-nFvLGlh6sOqpA7mYA-lIhpwFloc0wTAzorB3AeNuvb8qbJM5gZipRsvCuo5K9BHZ&a_bogus=dfsQvchLMsm1rjvIvhDz9bwmOIm0YW4HgZEz0q7Hktw9",
+    type:"GET",
+    headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer 111111",
+        "clientid":"1111111"
+    },
+    success: function(response) {
+        console.log(JSON.stringify(response));
+    },
+    error: function(xhr, status, error) {
+        console.log(JSON.stringify(xhr) + status + "  " + error);
+    }
+  })
+}
+
+
+
+</script>
